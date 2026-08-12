@@ -26,7 +26,7 @@ const GET_DASHBOARD_DATA = gql`
 `;
 
 const CREATE_ORG = gql`
-  mutation CreateOrg($orgName: String!, $userId: uuid!) {
+  mutation CreateOrg($orgName: String!) {
     insert_organizations_one(object: {
       name: $orgName, 
       quota_limit: 100, 
@@ -34,7 +34,6 @@ const CREATE_ORG = gql`
       members: {
         data: [
           {
-            user_id: $userId,
             role: "owner"
           }
         ]
@@ -147,8 +146,7 @@ export default function Dashboard() {
               try {
                 await createOrg({
                   variables: {
-                    orgName,
-                    userId: user?.id
+                    orgName
                   }
                 });
                 refetch();
