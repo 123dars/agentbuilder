@@ -2,7 +2,7 @@ actions:
   - name: approveStep
     definition:
       kind: synchronous
-      handler: http://host.docker.internal:3000/api/actions/approveStep
+      handler: "{{ACTION_BASE_URL}}/api/actions/approveStep"
       forward_client_headers: true
       headers:
         - name: x-hasura-admin-secret
@@ -12,7 +12,7 @@ actions:
   - name: retryStep
     definition:
       kind: synchronous
-      handler: http://host.docker.internal:3000/api/actions/retryStep
+      handler: "{{ACTION_BASE_URL}}/api/actions/retryStep"
       forward_client_headers: true
       headers:
         - name: x-hasura-admin-secret
@@ -22,7 +22,7 @@ actions:
   - name: triggerWorkflowRun
     definition:
       kind: synchronous
-      handler: http://host.docker.internal:3000/api/actions/triggerWorkflowRun
+      handler: "{{ACTION_BASE_URL}}/api/actions/triggerWorkflowRun"
       forward_client_headers: true
       headers:
         - name: x-hasura-admin-secret
