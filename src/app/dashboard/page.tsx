@@ -18,7 +18,7 @@ const GET_DASHBOARD_DATA = gql`
       workflows {
         id
         name
-        status
+        description
         updated_at
       }
     }
