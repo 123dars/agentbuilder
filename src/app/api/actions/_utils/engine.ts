@@ -138,7 +138,7 @@ export const executeWorkflow = async (run_id: string, adminSecret?: string, star
 
       if (step.type === 'llm_call') {
         const apiKey = process.env.OPENAI_API_KEY;
-        if (apiKey) {
+        if (apiKey && apiKey !== 'sk-fake-key' && apiKey.trim() !== '') {
             const res = await fetch("https://api.openai.com/v1/chat/completions", {
                 method: "POST",
                 headers: {
