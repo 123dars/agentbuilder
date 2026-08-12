@@ -1,0 +1,3 @@
+INSERT INTO public.org_members (org_id, user_id, role) 
+SELECT '11111111-1111-1111-1111-111111111111', id, 'owner' FROM auth.users 
+ON CONFLICT DO NOTHING;

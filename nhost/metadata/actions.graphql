@@ -1,0 +1,32 @@
+type Mutation {
+  approveStep(
+    step_run_id: String!
+    approved: Boolean!
+  ): ApproveStepResponse
+}
+
+type Mutation {
+  retryStep(
+    run_id: String!
+  ): RetryStepResponse
+}
+
+type Mutation {
+  triggerWorkflowRun(
+    workflow_id: String!
+  ): TriggerRunResponse
+}
+
+type TriggerRunResponse {
+  run_id: String!
+  status: String!
+}
+
+type ApproveStepResponse {
+  success: Boolean!
+}
+
+type RetryStepResponse {
+  success: Boolean!
+}
+

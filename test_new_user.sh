@@ -1,0 +1,1 @@
+docker exec n8n-clone-graphql-1 curl -s -X POST -H "x-hasura-admin-secret: nhost-admin-secret" -H "x-hasura-role: user" -H "x-hasura-user-id: 80f2b8de-79aa-4652-83fe-5615a172ce5b" -d '{"query":"query GetDashboardData { organizations { id name quota_limit quota_used workflows { id name description updated_at } members { role user_id } } }"}' http://localhost:8080/v1/graphql

@@ -1,0 +1,1 @@
+docker exec n8n-clone-graphql-1 curl -s -X POST -H "x-hasura-admin-secret: nhost-admin-secret" -H "Content-Type: application/json" -d '{"type": "reload_metadata", "args": {}}' http://localhost:1337/v1/metadata
