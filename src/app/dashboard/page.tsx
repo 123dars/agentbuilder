@@ -46,7 +46,7 @@ const CREATE_ORG = gql`
 `;
 
 const containerVariants: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 1 },
   show: {
     opacity: 1,
     transition: { staggerChildren: 0.1 }
@@ -54,7 +54,7 @@ const containerVariants: Variants = {
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  hidden: { opacity: 1, y: 0, scale: 1 },
   show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 25 } }
 };
 
@@ -211,7 +211,7 @@ export default function Dashboard() {
                   </div>
                 </div>
 
-                {org.workflows.length === 0 ? (
+                {(org.workflows || []).length === 0 ? (
                   <div className="p-16 border border-white/10 border-dashed rounded-[2rem] text-center bg-neutral-900/20 backdrop-blur-sm shadow-inner">
                     <Workflow className="w-12 h-12 text-neutral-600 mx-auto mb-4" />
                     <h3 className="text-xl font-bold text-neutral-300 mb-2">No workflows created yet</h3>
@@ -219,7 +219,7 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {org.workflows.map((wf: any) => (
+                    {(org.workflows || []).map((wf: any) => (
                       <Link 
                         key={wf.id} 
                         href={`/workflow/${wf.id}`}
