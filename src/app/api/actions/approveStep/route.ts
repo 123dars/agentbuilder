@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const adminClient = getAdminClient();
+    const adminClient = getAdminClient(req);
 
     const { step_runs_by_pk: stepRun } = await adminClient.request<any>(VERIFY_STEP_RUN, { step_run_id });
     
@@ -76,8 +76,8 @@ export async function POST(req: NextRequest) {
             user_id: userId, 
             time: new Date().toISOString() 
         });
-        
-        await executeWorkflow(runId).catch(console.error);
+        const adminSecret = req.headers.get ? req.headers.get('x-hasura-admin-secret') : (req.headers as any)['x-hasura-admin-secret'];
+        await executeWorkflow(runId, adminSecret || undefined).catch(console.error);
     } else {
         await adminClient.request(REJECT_STEP_RUN, { step_run_id });
         const UPDATE_RUN_STATUS = gql`

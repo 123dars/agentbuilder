@@ -12,10 +12,17 @@ const HASURA_ENDPOINT = subdomain === 'local'
 
 const ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET || 'nhost-admin-secret';
 
-export const getAdminClient = () => {
+export const getAdminClient = (req?: any) => {
+  let secret;
+  if (req) {
+    secret = req.headers.get ? req.headers.get('x-hasura-admin-secret') : req.headers['x-hasura-admin-secret'];
+  }
+  
+  const adminSecret = secret || process.env.NHOST_ADMIN_SECRET || 'nhost-admin-secret';
+
   return new GraphQLClient(HASURA_ENDPOINT, {
     headers: {
-      'x-hasura-admin-secret': ADMIN_SECRET,
+      'x-hasura-admin-secret': adminSecret,
     },
   });
 };

@@ -24,13 +24,14 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const adminClient = getAdminClient();
+    const adminClient = getAdminClient(req);
 
     // Reset failed steps in this run to pending
     await adminClient.request(RETRY_RUN, { run_id });
 
     // Re-invoke the engine. It will skip completed steps and run the pending one.
-    await executeWorkflow(run_id).catch(console.error);
+    const adminSecret = req.headers.get ? req.headers.get('x-hasura-admin-secret') : (req.headers as any)['x-hasura-admin-secret'];
+    await executeWorkflow(run_id, adminSecret || undefined).catch(console.error);
 
     return NextResponse.json({ success: true });
 

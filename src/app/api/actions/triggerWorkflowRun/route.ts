@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const { workflow_id } = body.input;
     
     const callerClient = getCallerClient(req);
-    const adminClient = getAdminClient();
+    const adminClient = getAdminClient(req);
 
     const { workflows_by_pk: workflow } = await callerClient.request<any>(VERIFY_WORKFLOW, { workflow_id });
     
@@ -58,7 +58,8 @@ export async function POST(req: NextRequest) {
 
     const { insert_workflow_runs_one: run } = await adminClient.request<any>(CREATE_RUN, { workflow_id });
 
-    await executeWorkflow(run.id).catch(console.error);
+    const adminSecret = req.headers.get ? req.headers.get('x-hasura-admin-secret') : (req.headers as any)['x-hasura-admin-secret'];
+    await executeWorkflow(run.id, adminSecret || undefined).catch(console.error);
 
     return NextResponse.json({
       run_id: run.id,

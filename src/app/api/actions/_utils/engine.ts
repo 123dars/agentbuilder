@@ -65,8 +65,8 @@ const INCREMENT_QUOTA = gql`
 // Helper to simulate delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const executeWorkflow = async (run_id: string, startFromStepId?: string) => {
-  const client = getAdminClient();
+export const executeWorkflow = async (run_id: string, adminSecret?: string, startFromStepId?: string) => {
+  const client = getAdminClient(adminSecret ? { headers: { get: (k: string) => k === 'x-hasura-admin-secret' ? adminSecret : null } } : undefined);
   
   const { workflow_runs_by_pk: run } = await client.request<any>(GET_WORKFLOW, { run_id });
   if (!run || (run.status !== 'running' && run.status !== 'pending' && run.status !== 'paused')) {
