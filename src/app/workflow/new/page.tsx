@@ -98,7 +98,9 @@ const CustomNode = ({ id, data, isConnectable, selected }: NodeProps) => {
   );
 };
 
-export default function WorkflowBuilder() {
+import { Suspense } from "react";
+
+function WorkflowBuilderContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orgId = searchParams.get("orgId");
@@ -272,5 +274,13 @@ export default function WorkflowBuilder() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function WorkflowBuilder() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-[#050505] text-white">Loading...</div>}>
+      <WorkflowBuilderContent />
+    </Suspense>
   );
 }

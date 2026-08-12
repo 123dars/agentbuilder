@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useQuery, useSubscription, useMutation, gql } from "@apollo/client";
 import { Activity, Play, CheckCircle, XCircle, PauseCircle, ChevronRight, Settings, ArrowLeft, Terminal, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
 
 const GET_WORKFLOW = gql`
@@ -69,12 +69,12 @@ const RETRY_STEP = gql`
   }
 `;
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.15 } }
 };
 
-const stepVariants = {
+const stepVariants: Variants = {
   hidden: { opacity: 0, x: -30 },
   show: { opacity: 1, x: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
 };

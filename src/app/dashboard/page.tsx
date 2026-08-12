@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { LogOut, Plus, Activity, Settings, Workflow, ChevronRight, Zap } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const GET_DASHBOARD_DATA = gql`
   query GetDashboardData {
@@ -18,18 +18,14 @@ const GET_DASHBOARD_DATA = gql`
       workflows {
         id
         name
-        description
+        status
         updated_at
-      }
-      members {
-        role
-        user_id
       }
     }
   }
 `;
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -37,7 +33,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
   show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300, damping: 25 } }
 };
