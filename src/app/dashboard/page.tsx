@@ -3,7 +3,7 @@
 import { useAuthenticationStatus, useUserData, useSignOut } from "@nhost/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import { LogOut, Plus, Activity, Settings, Workflow, ChevronRight, Zap } from "lucide-react";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
@@ -21,6 +21,27 @@ const GET_DASHBOARD_DATA = gql`
         status
         updated_at
       }
+    }
+  }
+`;
+
+const CREATE_ORG = gql`
+  mutation CreateOrg($orgName: String!, $userId: uuid!) {
+    insert_organizations_one(object: {
+      name: $orgName, 
+      quota_limit: 100, 
+      quota_used: 0,
+      members: {
+        data: [
+          {
+            user_id: $userId,
+            role: "owner"
+          }
+        ]
+      }
+    }) {
+      id
+      name
     }
   }
 `;
@@ -43,6 +64,8 @@ export default function Dashboard() {
   const user = useUserData();
   const router = useRouter();
   const { signOut } = useSignOut();
+
+  const [createOrg] = useMutation(CREATE_ORG);
 
   const { data, loading, error, refetch } = useQuery(GET_DASHBOARD_DATA, {
     skip: !isAuthenticated,
@@ -120,14 +143,18 @@ export default function Dashboard() {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
               const orgName = formData.get('orgName');
-              // Using nhost auth to get the user ID
-              const session = await fetch('/api/create-org', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ orgName, userId: user?.id })
-              });
-              if (session.ok) {
+              
+              try {
+                await createOrg({
+                  variables: {
+                    orgName,
+                    userId: user?.id
+                  }
+                });
                 refetch();
+              } catch (err) {
+                console.error("Failed to create org:", err);
+                alert("Failed to create workspace. Check console.");
               }
             }} className="space-y-4">
               <div className="relative group text-left">
