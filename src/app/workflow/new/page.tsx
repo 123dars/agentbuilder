@@ -85,7 +85,7 @@ const CustomNode = ({ id, data, isConnectable, selected }: NodeProps) => {
           <span className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Configuration</span>
         </div>
         <textarea
-          className="w-full h-32 bg-neutral-950/50 border border-neutral-800/80 rounded-xl p-3 font-mono text-[11px] leading-relaxed text-blue-200 focus:ring-2 focus:ring-blue-500/50 outline-none nodrag resize-none shadow-inner"
+          className="w-full h-32 bg-neutral-950/50 border border-neutral-800/80 rounded-xl p-3 font-mono text-[11px] leading-relaxed text-blue-200 focus:ring-2 focus:ring-blue-500/50 outline-none nodrag nowheel nopan resize-none shadow-inner"
           value={d.config}
           onChange={(e) => d.onChangeConfig(id, e.target.value)}
           placeholder="{}"
@@ -123,7 +123,7 @@ function WorkflowBuilderContent() {
     setNodes((nds) =>
       nds.map((n) => {
         if (n.id === id) {
-          n.data = { ...n.data, config };
+          return { ...n, data: { ...n.data, config } };
         }
         return n;
       })
