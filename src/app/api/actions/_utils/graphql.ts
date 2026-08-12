@@ -3,13 +3,19 @@ import { GraphQLClient } from 'graphql-request';
 // Disable SSL verification for local Nhost self-signed certificates
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-// Nhost CLI exposes GraphQL on 443 via Traefik router locally
-const HASURA_ENDPOINT = 'https://local.graphql.local.nhost.run/v1';
+const subdomain = process.env.NEXT_PUBLIC_NHOST_SUBDOMAIN || 'local';
+const region = process.env.NEXT_PUBLIC_NHOST_REGION || '';
+
+const HASURA_ENDPOINT = subdomain === 'local' 
+  ? 'https://local.graphql.local.nhost.run/v1'
+  : `https://${subdomain}.graphql.${region}.nhost.run/v1`;
+
+const ADMIN_SECRET = process.env.NHOST_ADMIN_SECRET || 'nhost-admin-secret';
 
 export const getAdminClient = () => {
   return new GraphQLClient(HASURA_ENDPOINT, {
     headers: {
-      'x-hasura-admin-secret': 'nhost-admin-secret',
+      'x-hasura-admin-secret': ADMIN_SECRET,
     },
   });
 };
